@@ -1,6 +1,6 @@
 # template-resolver
 [![Build Status](https://travis-ci.org/danielkalen/template-resolver.svg?branch=master)](https://travis-ci.org/danielkalen/template-resolver)
-[![Code Climate](https://codeclimate.com/github/danielkalen/template-resolver/badges/gpa.svg)](https://codeclimate.com/github/danielkalen/template-resolver)
+[![Code Climate](https://api.codeclimate.com/v1/badges/ff8e12dbabe5bf454825/maintainability)](https://codeclimate.com/github/danielkalen/template-resolver)
 [![NPM](https://img.shields.io/npm/v/template-resolver.svg)](https://npmjs.com/package/template-resolver)
 
 Resolves env variables & inline shell commands in static files.
