@@ -1,0 +1,35 @@
+{
+  "name": "template-resolver",
+  "version": "0.0.1",
+  "description": "resolves env variables & inline shell commands in static files",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -u tdd --compilers coffee:coffee-register --slow 1000 --timeout 8000 test/test.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielkalen/template-resolver.git"
+  },
+  "keywords": [
+    "tmpl",
+    "parse",
+    "shell-exec",
+    "bash",
+    "script",
+    "resolve",
+    "template"
+  ],
+  "author": "danielkalen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielkalen/template-resolver/issues"
+  },
+  "homepage": "https://github.com/danielkalen/template-resolver#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "coffee-register": "^0.1.2",
+    "execa": "^0.8.0",
+    "mountenv": "0.0.1",
+    "string-replace-async": "^1.2.1"
+  }
+}
