@@ -45,6 +45,21 @@ suite "template-resolver", ()->
 			.then (result)-> expect(result).to.equal "I am #{expected}!"
 
 
+	test "strings in {{...}} will be replaced as js expressions", ()->		
+		Promise.resolve()
+			.then ()-> require('../')('I am {{typeof abc === "undefined" ? 123 : 456}}!')
+			.then (result)-> expect(result).to.equal "I am 123!"
+
+	
+	test "env variables can be referenced via $ENV_VAR syntax", ()->
+		script = 'I am {{typeof $AAA === "undefined" ? 123 : 456}}!'
+		Promise.resolve()
+			.then ()-> require('../')(script)
+			.then (result)-> expect(result).to.equal "I am 123!"
+			.then ()-> process.env.AAA=0; require('../')(script)
+			.then (result)-> expect(result).to.equal "I am 456!"
+
+
 	test "env variables will be resolved before shell commands", ()->
 		process.env.TARGET = 'uname'
 		expected = null

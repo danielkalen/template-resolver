@@ -1,4 +1,5 @@
 stringReplace = require 'string-replace-async'
+vm = require 'vm'
 execa = require 'execa'
 regex = require './regex'
 require('mountenv').load()
@@ -8,12 +9,22 @@ resolveTemplate = (content)->
 		.then (content)-> content.replace regex.envVar, replaceEnvVar
 		.then (content)-> stringReplace content, regex.commandTicks, replaceCommand
 		.then (content)-> stringReplace content, regex.commandDollar, replaceCommand
+		.then (content)-> content.replace regex.jsExpression, replaceExpression
 
+
+replaceEnvVar = (e,target)->
+	process.env[target] or ''
 
 replaceCommand = (e,command)->
 	execa.shell(command).then (result)-> result.stdout
 
-replaceEnvVar = (e,target)->
-	process.env[target] or ''
+replaceExpression = (e,expression)->
+	expression = expression.replace regex.jsEnvVar, (e, variable)-> "env.#{variable}"
+	result = runExpression(expression)
+	return if result is undefined then '' else result
+
+runExpression = (expression)->
+	(new vm.Script expression)
+		.runInNewContext {env:process.env}
 
 module.exports = resolveTemplate
