@@ -4,12 +4,13 @@ execa = require 'execa'
 regex = require './regex'
 require('mountenv').load()
 
-resolveTemplate = (content)->
+resolveTemplate = (content, context)->
 	Promise.resolve(content)
 		.then (content)-> content.replace regex.envVar, replaceEnvVar
 		.then (content)-> stringReplace content, regex.commandTicks, replaceCommand
 		.then (content)-> stringReplace content, regex.commandDollar, replaceCommand
 		.then (content)-> content.replace regex.jsExpression, replaceExpression
+		.then (content)-> require('./resolveImports') content, context
 
 
 replaceEnvVar = (e,target)->
