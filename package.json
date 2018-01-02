@@ -39,6 +39,8 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "fs-jetpack": "^1.2.0",
     "mocha": "^4.0.1"
   }
 }

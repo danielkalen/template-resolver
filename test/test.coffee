@@ -1,4 +1,6 @@
-{expect} = require 'chai'
+chai = require 'chai'
+chai.use require 'chai-as-promised'
+{expect} = chai
 
 
 suite "template-resolver", ()->
@@ -79,18 +81,77 @@ suite "template-resolver", ()->
 		Promise.resolve()
 			.then ()-> require('execa').stdout process.env.TARGET, ['-v']
 			.then (result)-> uname = result
-			.then ()->
-				task = require('execa') './bin'
-				task.stdin.write(content)
-				task.stdin.end()
-				return task
-
+			.then ()-> runCLI(content)
 			.then (result)->
 				expect(result.stderr).to.equal ''
 				expect(result.stdout).to.equal "The result for uname is #{uname}."
 
 
+	suite "imports", ()->
+		fs = require 'fs-jetpack'
+		suiteTeardown ()-> fs.remove './temp'
+		suiteSetup ()->
+			process.env.AAA = 1
+			process.env.BBB = 2
+			process.env.CCC = 3
+			process.env.EXCL = '!'
+			fs.dir './temp', empty:true
+			fs.write './temp/main', @mainContent = """
+				my env is ${NODE_ENV}import './excl'
+				  import './child'
+			"""
+			fs.write './temp/excl', """
+				${EXCL}${EXCL}${EXCL}
+			"""
+			fs.write './temp/child', """
+				I am child${AAA}
+				and these are my children:
+				  import './child.d/child2'
+			"""
+			fs.write './temp/child.d/child2', """
+				I am child${BBB}
+				and these are my children:
+				  import './child.d/child3'
+			"""
+			fs.write './temp/child.d/child.d/child3', """
+				I am child${CCC}
+				and I dont have any children import '../../excl'
+			"""
+			@expected = """
+				my env is #{process.env.NODE_ENV}!!!
+				  I am child1
+				  and these are my children:
+				    I am child2
+				    and these are my children:
+				      I am child3
+				      and I dont have any children !!!
+			"""
+		
 
+		test "will be replaced & indented with the imported file's content", ()->
+			Promise.resolve()
+				.then ()=> require('../')(@mainContent, './temp')
+				.then (result)=> expect(result).to.equal @expected
+
+		test "context can be supplied via '-c' cli argument", ()->
+			expect(runCLI @mainContent).to.be.rejectedWith Error, 'ENOENT'
+
+			promise = runCLI @mainContent, ['-c', './temp']
+			expect(promise).not.to.be.rejected
+			promise.then ({stdout})=>
+				expect(stdout).to.equal @expected
+
+
+
+
+
+
+
+runCLI = (content, args=[])->
+	task = require('execa') './bin', args
+	task.stdin.write(content)
+	task.stdin.end()
+	return task
 
 
 
