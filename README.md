@@ -39,7 +39,7 @@ resolver(content).then((result)=> {
 });
 ```
 
-#### Imports
+## Imports
 Any import statements encountered in a file will be recursivly inlined inside the importing file. By default import paths will be resolved relative to the `CWD` but can be specified via the `-c dir` cli argument or as the second argument passed to the node API.
 
 **Example**
