@@ -10,7 +10,7 @@
   "scripts": {
     "prepublishOnly": "npm run test -s",
     "postpublish": "git push",
-    "test": "mocha -u tdd --compilers coffee:coffee-register --slow 1000 --timeout 8000 test/test.coffee"
+    "test": "mocha -u tdd --require coffee-register --slow 1000 --timeout 8000 test/test.coffee"
   },
   "repository": {
     "type": "git",
