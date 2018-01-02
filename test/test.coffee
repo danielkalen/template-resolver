@@ -91,13 +91,14 @@ suite "template-resolver", ()->
 		fs = require 'fs-jetpack'
 		suiteTeardown ()-> fs.remove './temp'
 		suiteSetup ()->
+			process.env.MAIN_ENV = 'test'
 			process.env.AAA = 1
 			process.env.BBB = 2
 			process.env.CCC = 3
 			process.env.EXCL = '!'
 			fs.dir './temp', empty:true
 			fs.write './temp/main', @mainContent = """
-				my env is ${NODE_ENV}import './excl'
+				my env is ${MAIN_ENV}import './excl'
 				  import './child'
 			"""
 			fs.write './temp/excl', """
@@ -118,7 +119,7 @@ suite "template-resolver", ()->
 				and I dont have any children import '../../excl'
 			"""
 			@expected = """
-				my env is #{process.env.NODE_ENV}!!!
+				my env is test!!!
 				  I am child1
 				  and these are my children:
 				    I am child2
