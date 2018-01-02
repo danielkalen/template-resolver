@@ -62,7 +62,7 @@ cat ./dir/main | template-resolver -c ./dir
 
 **Node API**
 ```javascript
-resolver(content, './dir')
+require('template-resolver')(content, './dir')
 ```
 
 
