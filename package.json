@@ -34,7 +34,7 @@
   "dependencies": {
     "coffee-register": "^0.1.2",
     "execa": "^0.8.0",
-    "mountenv": "0.0.1",
+    "mountenv": "^0.2.0",
     "string-replace-async": "^1.2.1"
   },
   "devDependencies": {

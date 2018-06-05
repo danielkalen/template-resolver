@@ -2,7 +2,7 @@ stringReplace = require 'string-replace-async'
 vm = require 'vm'
 execa = require 'execa'
 regex = require './regex'
-require('mountenv').load()
+require('mountenv').load(null, expand:true)
 
 resolveTemplate = (content, context)->
 	Promise.resolve(content)
