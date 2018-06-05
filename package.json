@@ -1,6 +1,6 @@
 {
   "name": "template-resolver",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "resolves env variables & inline shell commands in static files",
   "main": "index.js",
   "bin": {
